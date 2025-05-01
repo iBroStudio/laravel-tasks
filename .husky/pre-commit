@@ -1,0 +1,2 @@
+./vendor/bin/duster fix
+#bunx --no-install lint-staged
