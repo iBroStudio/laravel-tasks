@@ -10,6 +10,9 @@ use IBroStudio\Tasks\Models\Task;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
+/**
+ * @see \IBroStudio\Tasks\Models\Process
+ */
 trait HasLogs
 {
     protected Collection $parsedProcessClass;
@@ -39,7 +42,7 @@ trait HasLogs
     public function logName(): string
     {
         if (! is_null($this->parentProcess)) {
-            return $this->parentProcess->logDto()->logName;
+            return $this->parentProcess->config->log_name;
         }
 
         return $this->config->log_name;

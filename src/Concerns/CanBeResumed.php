@@ -7,6 +7,9 @@ namespace IBroStudio\Tasks\Concerns;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use Illuminate\Support\Facades\URL;
 
+/**
+ * @see \IBroStudio\Tasks\Models\Process
+ */
 trait CanBeResumed
 {
     public static function resume(int $process_id): self

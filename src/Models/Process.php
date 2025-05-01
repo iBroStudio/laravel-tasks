@@ -11,6 +11,7 @@ use IBroStudio\Tasks\Concerns\HasLogs;
 use IBroStudio\Tasks\Concerns\HasProcessable;
 use IBroStudio\Tasks\Concerns\HasTasks;
 use IBroStudio\Tasks\Contracts\PayloadContract;
+use IBroStudio\Tasks\Contracts\ProcessableContract;
 use IBroStudio\Tasks\Contracts\ProcessContract;
 use IBroStudio\Tasks\Contracts\ProcessExceptionContract;
 use IBroStudio\Tasks\DTO\ProcessConfigDTO;
@@ -27,12 +28,14 @@ use Spatie\Activitylog\Facades\LogBatch;
 
 /**
  * @property-read int $id
- * @property string $class
+ * @property class-string $type
  * @property PayloadContract $payload
  * @property ProcessStatesEnum $state
  * @property string $log_batch_uuid
  * @property int $parent_process_id
  * @property-read ProcessConfigDTO $config
+ * @property-read \Illuminate\Database\Eloquent\Collection|Model[] $processable
+ * @property-read Process|null $parentProcess
  */
 class Process extends Model implements ProcessContract
 {

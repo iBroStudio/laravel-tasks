@@ -21,7 +21,9 @@ class LogEventAction
         activity($logData->logName)
             ->causedBy($logData->causedBy)
             ->tap(function (Activity $activity) use ($logData) {
+                // @phpstan-ignore-next-line
                 $activity->subject_id = $logData->performedOn->id;
+                // @phpstan-ignore-next-line
                 $activity->subject_type = $logData->performedOn->type;
             })
             ->event($logData->event->getLabel())

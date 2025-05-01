@@ -17,6 +17,8 @@ use Parental\HasChildren;
 use Spatie\LaravelData\Data;
 
 /**
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ *
  * @property int $id
  * @property string $type
  * @property Data $payload

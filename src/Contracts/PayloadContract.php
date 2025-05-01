@@ -7,4 +7,6 @@ namespace IBroStudio\Tasks\Contracts;
 interface PayloadContract
 {
     public function update(array $data): self;
+
+    public function toArray(): array;
 }
