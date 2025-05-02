@@ -5,10 +5,10 @@ declare(strict_types=1);
 use IBroStudio\Tasks\Actions\Logs\EnsureProcessLogPerformedOnAction;
 use IBroStudio\Tasks\Actions\Logs\LogEventAction;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
+use IBroStudio\Tasks\Tests\Support\Payloads\FakePayload;
 use IBroStudio\Tasks\Tests\Support\Processes\FakeProcess;
 use Spatie\Activitylog\Facades\LogBatch;
 use Spatie\Activitylog\Models\Activity;
-use IBroStudio\Tasks\Tests\Support\Payloads\FakePayload;
 
 it('can dispatch log action', function () {
     Queue::fake();
