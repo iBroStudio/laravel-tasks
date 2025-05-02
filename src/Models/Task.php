@@ -82,13 +82,4 @@ class Task extends Model
             'state' => TaskStatesEnum::class,
         ];
     }
-
-    #[Scope]
-    protected function processable(Builder $query): void
-    {
-        $query->whereIn('state', [
-            TaskStatesEnum::WAITING,
-            TaskStatesEnum::PENDING,
-        ]);
-    }
 }

@@ -6,6 +6,7 @@ namespace IBroStudio\Tasks\Concerns;
 
 use IBroStudio\DataObjects\ValueObjects\ClassString;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
+use IBroStudio\Tasks\Enums\TaskStatesEnum;
 use IBroStudio\Tasks\Models\Process;
 use IBroStudio\Tasks\Models\Task;
 use Illuminate\Database\Eloquent\Model;
@@ -49,7 +50,9 @@ trait HasTasks
 
     public function processableTasks(): HasMany
     {
-        // @phpstan-ignore-next-line
-        return $this->tasks()->processable();
+        return $this->tasks()->whereIn('state', [
+            TaskStatesEnum::WAITING,
+            TaskStatesEnum::PENDING,
+        ]);
     }
 }
