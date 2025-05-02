@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IBroStudio\Tasks;
 
 use IBroStudio\Tasks\Commands\TasksCommand;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -17,7 +18,13 @@ class TasksServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasMigration('create_laravel_tasks_table')
-            ->hasCommand(TasksCommand::class)
-            ->hasRoute('web');
+            ->hasRoute('web')
+            ->hasInstallCommand(function(InstallCommand $command) {
+                $command
+                    ->publishConfigFile()
+                    ->publishMigrations()
+                    ->askToRunMigrations()
+                    ->askToStarRepoOnGitHub('iBroStudio/laravel-tasks');
+            });
     }
 }

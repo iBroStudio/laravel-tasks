@@ -11,7 +11,6 @@ use IBroStudio\Tasks\Concerns\HasLogs;
 use IBroStudio\Tasks\Concerns\HasProcessable;
 use IBroStudio\Tasks\Concerns\HasTasks;
 use IBroStudio\Tasks\Contracts\PayloadContract;
-use IBroStudio\Tasks\Contracts\ProcessableContract;
 use IBroStudio\Tasks\Contracts\ProcessContract;
 use IBroStudio\Tasks\Contracts\ProcessExceptionContract;
 use IBroStudio\Tasks\DTO\ProcessConfigDTO;

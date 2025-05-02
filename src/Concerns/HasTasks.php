@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace IBroStudio\Tasks\Concerns;
 
 use IBroStudio\DataObjects\ValueObjects\ClassString;
-use IBroStudio\Tasks\Contracts\PayloadContract;
-use IBroStudio\Tasks\DTO\ProcessConfigDTO;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use IBroStudio\Tasks\Models\Process;
 use IBroStudio\Tasks\Models\Task;
@@ -14,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @see \IBroStudio\Tasks\Models\Process
+ * @see Process
  */
 trait HasTasks
 {
