@@ -13,11 +13,11 @@ use IBroStudio\Tasks\Models\Task;
 
 class PauseProcessException extends Exception implements ProcessExceptionContract
 {
-    public function __construct(public Process $process, public Task $task)
+    public function __construct(public Process $process, public Task $task, protected $message = null)
     {
-        $task->transitionTo(TaskStatesEnum::WAITING);
-        $process->transitionTo(ProcessStatesEnum::WAITING);
+        $task->transitionTo(state: TaskStatesEnum::WAITING, message: $message);
+        $process->transitionToComplete(state: ProcessStatesEnum::WAITING, message: $message);
 
-        parent::__construct();
+        parent::__construct($message ?? '');
     }
 }

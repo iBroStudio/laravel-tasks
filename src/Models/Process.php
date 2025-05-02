@@ -97,21 +97,21 @@ class Process extends Model implements ProcessContract
         $this->transitionTo(ProcessStatesEnum::PROCESSING);
     }
 
-    public function transitionTo(ProcessStatesEnum $state): void
+    public function transitionTo(ProcessStatesEnum $state, ?string $message = null): void
     {
         $this->state = $state;
 
         $this->save();
 
-        $this->log();
+        $this->log(message: $message);
     }
 
-    public function transitionToComplete(?ProcessStatesEnum $state = null): void
+    public function transitionToComplete(?ProcessStatesEnum $state = null, ?string $message = null): void
     {
         $this->update(['state' => $state ?? ProcessStatesEnum::COMPLETED]);
 
         if ($this->config->use_logs) {
-            $this->log();
+            $this->log(message: $message);
             LogBatch::endBatch();
             EnsureProcessLogPerformedOnAction::dispatch($this);
         }

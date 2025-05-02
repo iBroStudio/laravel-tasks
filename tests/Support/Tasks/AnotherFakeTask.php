@@ -27,16 +27,16 @@ class AnotherFakeTask extends Task
     public function handle(FakeProcess|ProcessContract $process): FakeProcess|ProcessContract
     {
         if ($process->payload->skip_task) {
-            throw new SkipTaskException($process, $this);
+            throw new SkipTaskException($process, $this, 'This is the skip message.');
         }
 
         if ($process->payload->abort_process) {
-            throw new AbortTaskAndProcessException($process, $this);
+            throw new AbortTaskAndProcessException($process, $this, 'This is the abortion message.');
         }
 
         if ($process->payload->pause_process) {
             $process->updatePayload(['pause_process' => false]);
-            throw new PauseProcessException($process, $this);
+            throw new PauseProcessException($process, $this, 'This is the pause message.');
         }
 
         return $process->updatePayload([

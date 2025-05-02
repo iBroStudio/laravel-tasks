@@ -13,11 +13,11 @@ use IBroStudio\Tasks\Models\Task;
 
 class AbortTaskAndProcessException extends Exception implements ProcessExceptionContract
 {
-    public function __construct(public Process $process, public Task $task)
+    public function __construct(public Process $process, public Task $task, protected $message = null)
     {
-        $task->transitionTo(TaskStatesEnum::ABORTED);
-        $process->transitionTo(ProcessStatesEnum::ABORTED);
+        $task->transitionTo(state: TaskStatesEnum::ABORTED, message: $message);
+        $process->transitionToComplete(state: ProcessStatesEnum::ABORTED, message: $message);
 
-        parent::__construct();
+        parent::__construct($message ?? '');
     }
 }

@@ -12,10 +12,10 @@ use IBroStudio\Tasks\Models\Task;
 
 class SkipTaskException extends Exception implements ProcessExceptionContract
 {
-    public function __construct(public Process $process, public Task $task)
+    public function __construct(public Process $process, public Task $task, protected $message = null)
     {
-        $task->transitionTo(TaskStatesEnum::SKIPPED);
+        $task->transitionTo(state: TaskStatesEnum::SKIPPED, message: $message);
 
-        parent::__construct();
+        parent::__construct($message ?? '');
     }
 }

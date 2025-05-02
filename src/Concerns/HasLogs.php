@@ -19,7 +19,7 @@ trait HasLogs
 
     protected Collection $parsedTaskClass;
 
-    public function log(?Task $task = null): void
+    public function log(?Task $task = null, ?string $message = null): void
     {
         if ($this->config->use_logs) {
             $this->parsedProcessClass = $this->parseTypeClass($this->type);
@@ -32,7 +32,7 @@ trait HasLogs
                     causedBy: auth()->user(),
                     performedOn: $this->processable ?? $this->parentProcess ?? $this,
                     event: $this->state,
-                    description: $this->logDescription($task),
+                    description: $message ?? $this->logDescription($task),
                     properties: $this->payload->toArray(),
                 )
             );

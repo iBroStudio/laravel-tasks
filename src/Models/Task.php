@@ -8,8 +8,6 @@ use Closure;
 use IBroStudio\Tasks\Contracts\ProcessContract;
 use IBroStudio\Tasks\Enums\TaskStatesEnum;
 use IBroStudio\Tasks\Exceptions\SkipTaskException;
-use Illuminate\Database\Eloquent\Attributes\Scope;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -67,13 +65,13 @@ class Task extends Model
         }
     }
 
-    public function transitionTo(TaskStatesEnum $state): void
+    public function transitionTo(TaskStatesEnum $state, ?string $message = null): void
     {
         $this->state = $state;
 
         $this->save();
 
-        $this->process->log($this);
+        $this->process->log(task: $this, message: $message);
     }
 
     protected function casts(): array
