@@ -11,6 +11,7 @@ use IBroStudio\Tasks\Exceptions\SkipTaskException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Lorisleiva\Actions\Concerns\AsObject;
 use Parental\HasChildren;
 use Spatie\LaravelData\Data;
 
@@ -26,7 +27,7 @@ use Spatie\LaravelData\Data;
  */
 class Task extends Model
 {
-    use AsAction;
+    use AsObject;
     use HasChildren;
     use HasFactory;
 

@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Pipeline;
 use Illuminate\Support\Traits\Tappable;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Lorisleiva\Actions\Concerns\AsObject;
 use Parental\HasChildren;
 use Spatie\Activitylog\Facades\LogBatch;
 
@@ -38,7 +39,7 @@ use Spatie\Activitylog\Facades\LogBatch;
  */
 class Process extends Model implements ProcessContract
 {
-    use AsAction;
+    use AsObject;
     use CanBeResumed;
     use HasChildren;
     use HasConfig;
