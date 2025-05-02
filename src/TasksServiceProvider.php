@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace IBroStudio\Tasks;
 
-use IBroStudio\Tasks\Commands\TasksCommand;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -19,7 +18,7 @@ class TasksServiceProvider extends PackageServiceProvider
             ->hasViews()
             ->hasMigration('create_laravel_tasks_table')
             ->hasRoute('web')
-            ->hasInstallCommand(function(InstallCommand $command) {
+            ->hasInstallCommand(function (InstallCommand $command) {
                 $command
                     ->publishConfigFile()
                     ->publishMigrations()

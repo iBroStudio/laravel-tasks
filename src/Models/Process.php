@@ -48,6 +48,8 @@ class Process extends Model implements ProcessContract
     use HasTasks;
     use Tappable;
 
+    protected $table = 'processes';
+
     protected $fillable = [
         'type',
         'payload',
