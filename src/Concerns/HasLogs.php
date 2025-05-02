@@ -50,12 +50,8 @@ trait HasLogs
 
     public function getLogNameFromClass(?string $string = null): string
     {
-        return Str::of($string ?? get_class($this))
-            ->classBasename()
-            ->chopEnd('Process')
-            ->chopEnd('Task')
-            ->slug()
-            ->value();
+        return $this->parseTypeClass($string ?? get_class($this))
+            ->implode('-');
     }
 
     protected function logDescription(?Task $task = null): string
@@ -76,7 +72,7 @@ trait HasLogs
             ->chopEnd('Task')
             ->split('/(?<=[a-z])(?=[A-Z])|(?=[A-Z][a-z])/', -1, PREG_SPLIT_NO_EMPTY)
             ->map(function (string $item) {
-                return mb_lcfirst($item);
+                return Str::lower($item);
             });
     }
 }
