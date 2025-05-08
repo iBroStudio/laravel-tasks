@@ -21,7 +21,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Pipeline;
 use Illuminate\Support\Traits\Tappable;
-use Lorisleiva\Actions\Concerns\AsAction;
 use Lorisleiva\Actions\Concerns\AsObject;
 use Parental\HasChildren;
 use Spatie\Activitylog\Facades\LogBatch;
@@ -83,7 +82,7 @@ class Process extends Model implements ProcessContract
 
         } catch (ProcessExceptionContract $processException) {
 
-            return $processException->process;
+            return $processException->task->process->refresh();
 
         }
     }
@@ -118,8 +117,14 @@ class Process extends Model implements ProcessContract
         }
     }
 
-    public function updatePayload(array $data): self
+    public function updatePayload(PayloadContract|array $data): self
     {
+        $this->payload = is_array($data) ? $this->payload->update($data) : $data;
+
+        if ($this->isClean()) {
+            return $this;
+        }
+
         return $this->tap()->update([
             'payload' => $this->payload->update($data),
         ]);

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace IBroStudio\Tasks\Models;
 
 use Closure;
+use IBroStudio\Tasks\Contracts\PayloadContract;
 use IBroStudio\Tasks\Contracts\ProcessContract;
 use IBroStudio\Tasks\Enums\TaskStatesEnum;
 use IBroStudio\Tasks\Exceptions\SkipTaskException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Lorisleiva\Actions\Concerns\AsAction;
 use Lorisleiva\Actions\Concerns\AsObject;
 use Parental\HasChildren;
 use Spatie\LaravelData\Data;
@@ -46,23 +46,25 @@ class Task extends Model
         return $this->belongsTo(Process::class);
     }
 
-    public function handle(ProcessContract $process): ProcessContract
+    public function handle(PayloadContract $payload): PayloadContract|array
     {
-        return $process;
+        $this->transitionTo(TaskStatesEnum::STARTED);
+
+        return tap($this->execute($payload),
+            fn (PayloadContract|array $process) => $this->transitionTo(TaskStatesEnum::COMPLETED)
+        );
     }
 
     public function asProcessTask(ProcessContract $process, Closure $next): mixed
     {
         try {
-            $this->transitionTo(TaskStatesEnum::STARTED);
+            $payload = $this->handle($process->payload);
 
-            return $next(tap($this->handle($process),
-                fn (ProcessContract $process) => $this->transitionTo(TaskStatesEnum::COMPLETED)
-            ));
+            return $next($process->updatePayload($payload));
 
         } catch (SkipTaskException $skipTask) {
 
-            return $next($skipTask->process);
+            return $next($process);
         }
     }
 
@@ -72,7 +74,12 @@ class Task extends Model
 
         $this->save();
 
-        $this->process->log(task: $this, message: $message);
+        $this->process?->log(task: $this, message: $message);
+    }
+
+    protected function execute(PayloadContract $payload): PayloadContract|array
+    {
+        return $payload;
     }
 
     protected function casts(): array

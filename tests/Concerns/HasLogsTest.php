@@ -5,6 +5,7 @@ declare(strict_types=1);
 use IBroStudio\Tasks\Actions\Logs\EnsureProcessLogPerformedOnAction;
 use IBroStudio\Tasks\Actions\Logs\LogEventAction;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
+use IBroStudio\Tasks\Enums\TaskStatesEnum;
 use IBroStudio\Tasks\Tests\Support\Payloads\FakePayload;
 use IBroStudio\Tasks\Tests\Support\Processes\FakeProcess;
 use Spatie\Activitylog\Facades\LogBatch;
@@ -45,10 +46,10 @@ it('can log process events', function () {
         'event' => ProcessStatesEnum::PROCESSING->getLabel(),
         'batch_uuid' => $process->log_batch_uuid,
     ])
-        ->and($logs->get(1)->event)->toBe(ProcessStatesEnum::PROCESSING->getLabel())
+        ->and($logs->get(1)->event)->toBe(TaskStatesEnum::PROCESSING->getLabel())
         ->and($logs->get(1)->description)->toBe('fake first started')
-        ->and($logs->get(7)->event)->toBe(ProcessStatesEnum::COMPLETED->getLabel())
-        ->and($logs->get(7)->description)->toBe('fake completed')
+        ->and($logs->last()->event)->toBe(ProcessStatesEnum::COMPLETED->getLabel())
+        ->and($logs->last()->description)->toBe('fake completed')
         ->and(LogBatch::isOpen())->toBeFalse();
 });
 

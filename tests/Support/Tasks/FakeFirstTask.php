@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace IBroStudio\Tasks\Tests\Support\Tasks;
 
-use IBroStudio\Tasks\Contracts\ProcessContract;
+use IBroStudio\Tasks\Contracts\PayloadContract;
 use IBroStudio\Tasks\Models\Task;
 use IBroStudio\Tasks\Tests\Support\Database\Factories\FakeFirstTaskFactory;
-use IBroStudio\Tasks\Tests\Support\Processes\FakeProcess;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Parental\HasParent;
@@ -17,13 +16,13 @@ class FakeFirstTask extends Task
     use HasFactory;
     use HasParent;
 
-    public function handle(FakeProcess|ProcessContract $process): FakeProcess|ProcessContract
-    {
-        return $process->updatePayload(['property1' => 'value2']);
-    }
-
     protected static function newFactory(): Factory
     {
         return FakeFirstTaskFactory::new();
+    }
+
+    protected function execute(PayloadContract $payload): PayloadContract|array
+    {
+        return ['property1' => 'value2'];
     }
 }

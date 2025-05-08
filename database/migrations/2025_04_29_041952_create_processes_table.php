@@ -27,7 +27,7 @@ return new class extends Migration
 
         Schema::create('processes_tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('process_id')->constrained('processes');
+            $table->foreignId('process_id')->nullable()->constrained('processes');
             $table->string('type')->nullable();
             $table->string('state')->default(TaskStatesEnum::PENDING);
         });
