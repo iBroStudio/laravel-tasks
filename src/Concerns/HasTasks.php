@@ -8,6 +8,7 @@ use IBroStudio\DataObjects\ValueObjects\ClassString;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use IBroStudio\Tasks\Enums\TaskStatesEnum;
 use IBroStudio\Tasks\Models\Process;
+use IBroStudio\Tasks\Models\ProcessAsTask;
 use IBroStudio\Tasks\Models\Task;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,7 +22,15 @@ trait HasTasks
     {
         static::created(function (Process $process) {
             $process->tasks()->createMany(
-                $process->config->tasks->map(function (ClassString $type) {
+                $process->config->tasks->map(function (ClassString $type) use ($process) {
+                    if (is_a($type->value, Process::class, true)) {
+                        $child_process = $type->value::create([
+                            'payload' => $process->payload,
+                        ]);
+
+                        return ['type' => ProcessAsTask::class, 'as_process_id' => $child_process->id];
+                    }
+
                     return ['type' => $type->value];
                 })->toArray(),
             );

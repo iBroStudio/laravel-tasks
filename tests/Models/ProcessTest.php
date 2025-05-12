@@ -5,7 +5,9 @@ declare(strict_types=1);
 use IBroStudio\DataObjects\ValueObjects\Text;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use IBroStudio\Tasks\Enums\TaskStatesEnum;
+use IBroStudio\Tasks\Models\Process;
 use IBroStudio\Tasks\Tests\Support\Payloads\FakePayload;
+use IBroStudio\Tasks\Tests\Support\Processes\FakeParentProcess;
 use IBroStudio\Tasks\Tests\Support\Processes\FakeProcess;
 
 use function Pest\Laravel\assertModelExists;
@@ -73,4 +75,18 @@ it('can update a payload', function () {
             ->payload
             ->property1
     )->toBe('value2');
+});
+
+it('can execute a process within a process', function () {
+    $process = FakeParentProcess::factory()->create([
+        'payload' => FakePayload::from(['property1' => 'value1']),
+    ])->handle();
+
+    $child_process = Process::whereType(FakeProcess::class)->first();
+
+    // dd($child_process->tasks->toArray());
+    expect($process->state)->toBe(ProcessStatesEnum::COMPLETED)
+        ->and($process->tasks)->each(fn ($task) => $task->state->toBe(TaskStatesEnum::COMPLETED))
+        ->and($child_process->state)->toBe(ProcessStatesEnum::COMPLETED)
+        ->and($child_process->tasks)->each(fn ($task) => $task->state->toBe(TaskStatesEnum::COMPLETED));
 });

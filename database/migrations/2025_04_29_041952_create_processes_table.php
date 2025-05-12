@@ -29,6 +29,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('process_id')->nullable()->constrained('processes');
             $table->string('type')->nullable();
+            $table->foreignId('as_process_id')->nullable()->constrained('processes');
             $table->string('state')->default(TaskStatesEnum::PENDING);
         });
     }

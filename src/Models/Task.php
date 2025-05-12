@@ -11,6 +11,7 @@ use IBroStudio\Tasks\Enums\TaskStatesEnum;
 use IBroStudio\Tasks\Exceptions\SkipTaskException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Lorisleiva\Actions\Concerns\AsObject;
 use Parental\HasChildren;
 use Spatie\LaravelData\Data;
@@ -39,11 +40,17 @@ class Task extends Model
         'type',
         'process_id',
         'state',
+        'as_process_id',
     ];
 
-    public function process()
+    public function process(): BelongsTo
     {
         return $this->belongsTo(Process::class);
+    }
+
+    public function asProcess(): BelongsTo
+    {
+        return $this->belongsTo(Process::class, 'as_process_id');
     }
 
     public function handle(PayloadContract $payload): PayloadContract|array

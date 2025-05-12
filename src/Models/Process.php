@@ -125,6 +125,8 @@ class Process extends Model implements ProcessContract
             return $this;
         }
 
+        return $this->tap()->save();
+
         return $this->tap()->update([
             'payload' => $this->payload->update($data),
         ]);
