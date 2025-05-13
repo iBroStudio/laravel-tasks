@@ -11,6 +11,6 @@ class ProcessPayloadDTO extends Data implements PayloadContract
 {
     public function update(array $data): self
     {
-        return self::from([...$this->toArray(), ...$data]);
+        return self::from([...$this->all(), ...$data]);
     }
 }

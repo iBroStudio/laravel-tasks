@@ -15,7 +15,7 @@ it('can create tasks', function () {
         ->and($process->tasks->last())->toBeInstanceOf(IBroStudio\Tasks\Tests\Support\Tasks\ThirdFakeTask::class);
 });
 
-it('can run task', function () {
+it('can run a task as standalone', function () {
     $task = FakeFirstTask::factory()->create(['process_id' => null]);
 
     $task->handle(FakePayload::from(['property1' => 'value1']));
