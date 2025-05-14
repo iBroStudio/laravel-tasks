@@ -8,7 +8,7 @@ use IBroStudio\DataObjects\Concerns\HasConfig;
 use IBroStudio\Tasks\Actions\Logs\EnsureProcessLogPerformedOnAction;
 use IBroStudio\Tasks\Concerns\CanBeResumed;
 use IBroStudio\Tasks\Concerns\HasLogs;
-use IBroStudio\Tasks\Concerns\HasProcessable;
+use IBroStudio\Tasks\Concerns\HasProcessableModel;
 use IBroStudio\Tasks\Concerns\HasTasks;
 use IBroStudio\Tasks\Contracts\PayloadContract;
 use IBroStudio\Tasks\Contracts\ProcessContract;
@@ -44,7 +44,7 @@ class Process extends Model implements ProcessContract
     use HasConfig;
     use HasFactory;
     use HasLogs;
-    use HasProcessable;
+    use HasProcessableModel;
     use HasTasks;
     use Tappable;
 

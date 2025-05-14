@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IBroStudio\Tasks\Models;
 
 use Closure;
+use IBroStudio\Tasks\Concerns\HasProcessableModel;
 use IBroStudio\Tasks\Contracts\PayloadContract;
 use IBroStudio\Tasks\Contracts\ProcessContract;
 use IBroStudio\Tasks\Enums\TaskStatesEnum;
@@ -12,6 +13,7 @@ use IBroStudio\Tasks\Exceptions\SkipTaskException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Traits\Tappable;
 use Lorisleiva\Actions\Concerns\AsObject;
 use Parental\HasChildren;
 use Spatie\LaravelData\Data;
@@ -31,6 +33,8 @@ class Task extends Model
     use AsObject;
     use HasChildren;
     use HasFactory;
+    use HasProcessableModel;
+    use Tappable;
 
     public $timestamps = false;
 
@@ -41,6 +45,8 @@ class Task extends Model
         'process_id',
         'state',
         'as_process_id',
+        'processable',
+        'processable_dto',
     ];
 
     public function process(): BelongsTo

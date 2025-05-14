@@ -9,8 +9,9 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * @see \IBroStudio\Tasks\Models\Process
+ * @see \IBroStudio\Tasks\Models\Task
  */
-trait HasProcessable
+trait HasProcessableModel
 {
     public function processable(): MorphTo
     {

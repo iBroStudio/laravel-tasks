@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace IBroStudio\Tasks\Concerns;
 
+use IBroStudio\Tasks\Contracts\PayloadContract;
 use IBroStudio\Tasks\Models\Process;
+use IBroStudio\Tasks\Models\Task;
 
 trait IsProcessableDto
 {
@@ -20,5 +22,18 @@ trait IsProcessableDto
             'payload' => $payload_properties,
             'processable_dto' => $this,
         ])->handle();
+    }
+
+    /**
+     * @param  class-string<Task>  $taskClass
+     */
+    public function task(
+        string $taskClass,
+        PayloadContract $payload,
+        bool $async = false): Process
+    {
+        return $taskClass::create([
+            'processable_dto' => $this,
+        ])->handle($payload);
     }
 }

@@ -6,6 +6,7 @@ namespace IBroStudio\Tasks\Concerns;
 
 /**
  * @see \IBroStudio\Tasks\Models\Process
+ * @see \IBroStudio\Tasks\Models\Task
  */
 trait HasProcessableDto
 {
