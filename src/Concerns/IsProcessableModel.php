@@ -8,9 +8,10 @@ use IBroStudio\Tasks\Models\Process;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Bus\PendingDispatch;
 
-trait IsProcessable
+trait IsProcessableModel
 {
     /**
+     * @param  class-string<Process>  $processClass
      * @return ($async is true ? PendingDispatch : Process)
      */
     public static function callProcess(
@@ -26,6 +27,9 @@ trait IsProcessable
         return $this->morphMany(Process::class, 'processable');
     }
 
+    /**
+     * @param  class-string<Process>  $processClass
+     */
     public function process(
         string $processClass,
         array $payload_properties = [],

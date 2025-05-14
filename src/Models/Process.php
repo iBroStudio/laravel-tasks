@@ -57,6 +57,7 @@ class Process extends Model implements ProcessContract
         'parent_process_id',
         'log_batch_uuid',
         'processable',
+        'processable_dto',
     ];
 
     protected $with = ['tasks'];

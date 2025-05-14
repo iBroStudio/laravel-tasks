@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace IBroStudio\Tasks\Tests\Support\Processes;
 
+use IBroStudio\Tasks\Concerns\HasProcessableDto;
 use IBroStudio\Tasks\Contracts\ProcessContract;
 use IBroStudio\Tasks\DTO\ProcessConfigDTO;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use IBroStudio\Tasks\Models\Process;
 use IBroStudio\Tasks\Tests\Support\Database\Factories\FakeProcessFactory;
+use IBroStudio\Tasks\Tests\Support\DTO\ProcessableDto;
 use IBroStudio\Tasks\Tests\Support\Payloads\FakePayload;
 use IBroStudio\Tasks\Tests\Support\Tasks\AnotherFakeTask;
 use IBroStudio\Tasks\Tests\Support\Tasks\FakeFirstTask;
@@ -29,6 +31,7 @@ class FakeProcess extends Process implements ProcessContract
 {
     use HasFactory;
     use HasParent;
+    use HasProcessableDto;
 
     protected $table = 'processes';
 
@@ -47,5 +50,10 @@ class FakeProcess extends Process implements ProcessContract
                 ThirdFakeTask::class,
             ],
         ]);
+    }
+
+    protected function getProcessableDtoClass(): string
+    {
+        return ProcessableDto::class;
     }
 }
