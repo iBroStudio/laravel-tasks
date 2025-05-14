@@ -30,10 +30,10 @@ trait IsProcessableDto
     public function task(
         string $taskClass,
         PayloadContract $payload,
-        bool $async = false): Process
+        bool $async = false): Task
     {
-        return $taskClass::create([
-            'processable_dto' => $this,
-        ])->handle($payload);
+        return $taskClass::create(['processable_dto' => $this])
+            ->tap()
+            ->handle($payload);
     }
 }
