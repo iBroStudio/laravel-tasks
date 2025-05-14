@@ -12,6 +12,7 @@ use IBroStudio\Tasks\Models\ProcessAsTask;
 use IBroStudio\Tasks\Models\Task;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Arr;
 
 /**
  * @see Process
@@ -23,15 +24,22 @@ trait HasTasks
         static::created(function (Process $process) {
             $process->tasks()->createMany(
                 $process->config->tasks->map(function (ClassString $type) use ($process) {
+
+                    $task_properties = ['type' => $type->value];
+
                     if (is_a($type->value, Process::class, true)) {
                         $child_process = $type->value::create([
                             'payload' => $process->payload,
                         ]);
 
-                        return ['type' => ProcessAsTask::class, 'as_process_id' => $child_process->id];
+                        $task_properties = ['type' => ProcessAsTask::class, 'as_process_id' => $child_process->id];
                     }
 
-                    return ['type' => $type->value];
+                    if (method_exists($type->value, 'getProcessableDtoClass') && ! is_null($process->processable_dto)) {
+                        data_set($task_properties, 'processable_dto', $process->processable_dto);
+                    }
+
+                    return $task_properties;
                 })->toArray(),
             );
         });

@@ -39,6 +39,7 @@ it('allows processable to call process', function () {
     expect($process)->toBeInstanceOf(FakeProcess::class)
         ->and($process->processable->is($processable))->toBeTrue()
         ->and($process->state)->toBe(ProcessStatesEnum::COMPLETED)
+        ->and($process->tasks->first()->processable->is($processable))->toBeTrue()
         ->and($process->tasks)->each(fn ($task) => $task->state->toBe(TaskStatesEnum::COMPLETED));
 });
 

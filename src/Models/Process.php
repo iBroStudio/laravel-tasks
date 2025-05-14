@@ -56,7 +56,8 @@ class Process extends Model implements ProcessContract
         'state',
         'parent_process_id',
         'log_batch_uuid',
-        'processable',
+        'processable_id',
+        'processable_type',
         'processable_dto',
     ];
 

@@ -45,9 +45,19 @@ class Task extends Model
         'process_id',
         'state',
         'as_process_id',
-        'processable',
+        'processable_id',
+        'processable_type',
         'processable_dto',
     ];
+
+    protected static function booted(): void
+    {
+        static::created(function (Task $task) {
+            if (! is_null($task->process) && ! is_null($task->process->processable)) {
+                $task->process->processable->tasks()->save($task);
+            }
+        });
+    }
 
     public function process(): BelongsTo
     {

@@ -18,6 +18,7 @@ it('allows processable DTO to call process', function () {
     expect($process)->toBeInstanceOf(FakeProcess::class)
         ->and($process->processable_dto)->toBeInstanceOf(ProcessableDto::class)
         ->and($process->state)->toBe(ProcessStatesEnum::COMPLETED)
+        ->and($process->tasks->first()->processable_dto)->toBeInstanceOf(ProcessableDto::class)
         ->and($process->tasks)->each(fn ($task) => $task->state->toBe(TaskStatesEnum::COMPLETED));
 });
 

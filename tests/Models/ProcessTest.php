@@ -84,7 +84,6 @@ it('can execute a process within a process', function () {
 
     $child_process = Process::whereType(FakeProcess::class)->first();
 
-    // dd($child_process->tasks->toArray());
     expect($process->state)->toBe(ProcessStatesEnum::COMPLETED)
         ->and($process->tasks)->each(fn ($task) => $task->state->toBe(TaskStatesEnum::COMPLETED))
         ->and($child_process->state)->toBe(ProcessStatesEnum::COMPLETED)
