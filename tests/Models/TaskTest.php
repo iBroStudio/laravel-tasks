@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use IBroStudio\Tasks\Enums\TaskStatesEnum;
-use IBroStudio\Tasks\Tests\Support\Payloads\FakePayload;
+use IBroStudio\Tasks\Tests\Support\Payloads\FakePayloadDefault;
 use IBroStudio\Tasks\Tests\Support\Processes\FakeProcess;
 use IBroStudio\Tasks\Tests\Support\Tasks\FakeFirstTask;
 
@@ -18,7 +18,7 @@ it('can create tasks', function () {
 it('can run a task as standalone', function () {
     $task = FakeFirstTask::factory()->create(['process_id' => null]);
 
-    $task->handle(FakePayload::from(['property1' => 'value1']));
+    $task->handle(FakePayloadDefault::from(['property1' => 'value1']));
 
     expect($task->state)->toBe(TaskStatesEnum::COMPLETED);
 });
@@ -31,7 +31,7 @@ it('can run tasks', function () {
 
 it('can skip a task', function () {
     $process = FakeProcess::factory()->create([
-        'payload' => FakePayload::from(['property1' => 'value1', 'skip_task' => true]),
+        'payload' => FakePayloadDefault::from(['property1' => 'value1', 'skip_task' => true]),
     ])->handle();
 
     expect($process->state)->toBe(ProcessStatesEnum::COMPLETED)

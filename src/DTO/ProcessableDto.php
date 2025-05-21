@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace IBroStudio\Tasks\Concerns;
+namespace IBroStudio\Tasks\DTO;
 
 use IBroStudio\Tasks\Contracts\PayloadContract;
 use IBroStudio\Tasks\Models\Process;
 use IBroStudio\Tasks\Models\Task;
+use Spatie\LaravelData\Data;
 
-trait IsProcessableDto
+abstract class ProcessableDto extends Data
 {
     /**
      * @param  class-string<Process>  $processClass

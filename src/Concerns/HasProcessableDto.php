@@ -10,7 +10,7 @@ namespace IBroStudio\Tasks\Concerns;
  */
 trait HasProcessableDto
 {
-    abstract protected function getProcessableDtoClass(): string;
+    abstract public function getProcessableDtoClass(): string;
 
     public function initializeHasProcessableDto(): void
     {

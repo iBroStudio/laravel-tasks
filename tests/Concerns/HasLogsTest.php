@@ -6,7 +6,7 @@ use IBroStudio\Tasks\Actions\Logs\EnsureProcessLogPerformedOnAction;
 use IBroStudio\Tasks\Actions\Logs\LogEventAction;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use IBroStudio\Tasks\Enums\TaskStatesEnum;
-use IBroStudio\Tasks\Tests\Support\Payloads\FakePayload;
+use IBroStudio\Tasks\Tests\Support\Payloads\FakePayloadDefault;
 use IBroStudio\Tasks\Tests\Support\Processes\FakeProcess;
 use Spatie\Activitylog\Facades\LogBatch;
 use Spatie\Activitylog\Models\Activity;
@@ -55,7 +55,7 @@ it('can log process events', function () {
 
 it('can log a skip message', function () {
     $process = FakeProcess::factory()->create([
-        'payload' => FakePayload::from(['property1' => 'value1', 'skip_task' => true]),
+        'payload' => FakePayloadDefault::from(['property1' => 'value1', 'skip_task' => true]),
     ])->handle();
     $logs = Activity::inLog($process->logName())->get();
 
@@ -64,7 +64,7 @@ it('can log a skip message', function () {
 
 it('can log a pause message', function () {
     $process = FakeProcess::factory()->create([
-        'payload' => FakePayload::from(['property1' => 'value1', 'pause_process' => true]),
+        'payload' => FakePayloadDefault::from(['property1' => 'value1', 'pause_process' => true]),
     ])->handle();
     $logs = Activity::inLog($process->logName())->get();
 
@@ -74,7 +74,7 @@ it('can log a pause message', function () {
 
 it('can log an abortion message', function () {
     $process = FakeProcess::factory()->create([
-        'payload' => FakePayload::from(['property1' => 'value1', 'abort_process' => true]),
+        'payload' => FakePayloadDefault::from(['property1' => 'value1', 'abort_process' => true]),
     ])->handle();
     $logs = Activity::inLog($process->logName())->get();
 

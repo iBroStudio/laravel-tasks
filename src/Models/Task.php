@@ -8,6 +8,7 @@ use Closure;
 use IBroStudio\Tasks\Concerns\HasProcessableModel;
 use IBroStudio\Tasks\Contracts\PayloadContract;
 use IBroStudio\Tasks\Contracts\ProcessContract;
+use IBroStudio\Tasks\DTO\ProcessableDto;
 use IBroStudio\Tasks\Enums\TaskStatesEnum;
 use IBroStudio\Tasks\Exceptions\SkipTaskException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,16 +17,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Traits\Tappable;
 use Lorisleiva\Actions\Concerns\AsObject;
 use Parental\HasChildren;
-use Spatie\LaravelData\Data;
 
 /**
  * @mixin \Illuminate\Database\Eloquent\Builder
  *
  * @property int $id
  * @property string $type
- * @property Data $payload
+ * @property PayloadContract $payload
  * @property TaskStatesEnum $state
  * @property int $process_id
+ * @property string $process_type
+ * @property int $as_process_id
+ * @property int $processable_id
+ * @property string $processable_type
+ * @property ProcessableDto $processable_dto
  * @property Process $process
  */
 class Task extends Model
@@ -49,15 +54,6 @@ class Task extends Model
         'processable_type',
         'processable_dto',
     ];
-
-    protected static function booted(): void
-    {
-        static::created(function (Task $task) {
-            if (! is_null($task->process) && ! is_null($task->process->processable)) {
-                $task->process->processable->tasks()->save($task);
-            }
-        });
-    }
 
     public function process(): BelongsTo
     {
@@ -100,6 +96,27 @@ class Task extends Model
         $this->process?->log(task: $this, message: $message);
     }
 
+    protected static function booted(): void
+    {
+        /*
+        static::creating(function (Task $task) {
+            if (! is_null($task->process) && ! is_null($task->process->processable_dto)) {
+                $task->setAttribute('processable_dto', $task->process->processable_dto);
+
+                $task->mergeCasts([
+                    'processable_dto' => $task->process->getProcessableDtoClass(),
+                ]);
+            }
+        });
+        */
+
+        static::created(function (Task $task) {
+            if (! is_null($task->process) && ! is_null($task->process->processable)) {
+                $task->process->processable->tasks()->save($task);
+            }
+        });
+    }
+
     protected function execute(PayloadContract $payload): PayloadContract|array
     {
         return $payload;
@@ -109,6 +126,7 @@ class Task extends Model
     {
         return [
             'state' => TaskStatesEnum::class,
+            'processable_dto' => ProcessableDto::class,
         ];
     }
 }

@@ -6,7 +6,7 @@ use IBroStudio\DataObjects\ValueObjects\Text;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use IBroStudio\Tasks\Enums\TaskStatesEnum;
 use IBroStudio\Tasks\Models\Process;
-use IBroStudio\Tasks\Tests\Support\Payloads\FakePayload;
+use IBroStudio\Tasks\Tests\Support\Payloads\FakePayloadDefault;
 use IBroStudio\Tasks\Tests\Support\Processes\FakeParentProcess;
 use IBroStudio\Tasks\Tests\Support\Processes\FakeProcess;
 
@@ -30,7 +30,7 @@ it('can run a process', function () {
 
 it('can abort a process', function () {
     $process = FakeProcess::factory()->create([
-        'payload' => FakePayload::from(['property1' => 'value1', 'abort_process' => true]),
+        'payload' => FakePayloadDefault::from(['property1' => 'value1', 'abort_process' => true]),
     ])->handle();
 
     expect($process->state)->toBe(ProcessStatesEnum::ABORTED)
@@ -41,7 +41,7 @@ it('can abort a process', function () {
 
 it('can pause a process', function () {
     $process = FakeProcess::factory()->create([
-        'payload' => FakePayload::from(['property1' => 'value1', 'pause_process' => true]),
+        'payload' => FakePayloadDefault::from(['property1' => 'value1', 'pause_process' => true]),
     ])->handle();
 
     expect($process->state)->toBe(ProcessStatesEnum::WAITING)
@@ -52,7 +52,7 @@ it('can pause a process', function () {
 
 it('can resume a process from a signed url', function () {
     $process = FakeProcess::factory()->create([
-        'payload' => FakePayload::from(['property1' => 'value1', 'pause_process' => true]),
+        'payload' => FakePayloadDefault::from(['property1' => 'value1', 'pause_process' => true]),
     ])->handle();
 
     //    dd($process->tasks->toArray());
@@ -67,7 +67,7 @@ it('can resume a process from a signed url', function () {
 
 it('can update a payload', function () {
     $process = FakeProcess::factory()->create([
-        'payload' => FakePayload::from(['property1' => 'value1', 'pause_process' => true]),
+        'payload' => FakePayloadDefault::from(['property1' => 'value1', 'pause_process' => true]),
     ]);
 
     expect(
@@ -79,7 +79,7 @@ it('can update a payload', function () {
 
 it('can execute a process within a process', function () {
     $process = FakeParentProcess::factory()->create([
-        'payload' => FakePayload::from(['property1' => 'value1']),
+        'payload' => FakePayloadDefault::from(['property1' => 'value1']),
     ])->handle();
 
     $child_process = Process::whereType(FakeProcess::class)->first();

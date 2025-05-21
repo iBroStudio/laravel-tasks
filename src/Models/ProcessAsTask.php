@@ -15,8 +15,6 @@ class ProcessAsTask extends Task
     {
         $process = $this->asProcess->handle($payload);
 
-        // dd($process->payload);
-        // dd($process->tasks->toArray());
         return $process->payload;
     }
 }

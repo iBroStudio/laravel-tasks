@@ -5,7 +5,7 @@ declare(strict_types=1);
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use IBroStudio\Tasks\Enums\TaskStatesEnum;
 use IBroStudio\Tasks\Tests\Support\Models\ProcessableFakeModel;
-use IBroStudio\Tasks\Tests\Support\Payloads\FakePayload;
+use IBroStudio\Tasks\Tests\Support\Payloads\FakePayloadDefault;
 use IBroStudio\Tasks\Tests\Support\Processes\FakeProcess;
 use IBroStudio\Tasks\Tests\Support\Tasks\FakeFirstTask;
 
@@ -16,7 +16,7 @@ it('can have process', function () {
 
     $processable->processes()->create([
         'type' => FakeProcess::class,
-        'payload' => FakePayload::from(['property1' => 'value1']),
+        'payload' => FakePayloadDefault::from(['property1' => 'value1']),
     ]);
 
     assertModelExists(
@@ -71,7 +71,7 @@ it('can attach a task', function () {
 
 it('allows processable to call task', function () {
     $processable = ProcessableFakeModel::factory()->create();
-    $task = $processable->task(FakeFirstTask::class, FakePayload::from(['property1' => 'value1']));
+    $task = $processable->task(FakeFirstTask::class, FakePayloadDefault::from(['property1' => 'value1']));
 
     expect($task)->toBeInstanceOf(FakeFirstTask::class)
         ->and($task->processable->is($processable))->toBeTrue()
@@ -79,7 +79,7 @@ it('allows processable to call task', function () {
 });
 
 it('allows processable class to call task statically', function () {
-    $task = ProcessableFakeModel::callTask(FakeFirstTask::class, FakePayload::from(['property1' => 'value1']));
+    $task = ProcessableFakeModel::callTask(FakeFirstTask::class, FakePayloadDefault::from(['property1' => 'value1']));
 
     expect($task)->toBeInstanceOf(FakeFirstTask::class)
         ->and($task->state)->toBe(TaskStatesEnum::COMPLETED);

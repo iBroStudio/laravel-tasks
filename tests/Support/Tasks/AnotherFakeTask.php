@@ -10,7 +10,7 @@ use IBroStudio\Tasks\Exceptions\PauseProcessException;
 use IBroStudio\Tasks\Exceptions\SkipTaskException;
 use IBroStudio\Tasks\Models\Task;
 use IBroStudio\Tasks\Tests\Support\Database\Factories\AnotherFakeTaskFactory;
-use IBroStudio\Tasks\Tests\Support\Payloads\FakePayload;
+use IBroStudio\Tasks\Tests\Support\Payloads\FakePayloadDefault;
 use IBroStudio\Tasks\Tests\Support\Processes\FakeProcess;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -47,7 +47,7 @@ class AnotherFakeTask extends Task
         return [
             'property2' => 'value3',
             'modelproperty' => FakeProcess::factory()->create([
-                'payload' => FakePayload::from(['property1' => 'test']),
+                'payload' => FakePayloadDefault::from(['property1' => 'test']),
             ]),
         ];
     }

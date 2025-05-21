@@ -10,8 +10,8 @@ use IBroStudio\Tasks\DTO\ProcessConfigDTO;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use IBroStudio\Tasks\Models\Process;
 use IBroStudio\Tasks\Tests\Support\Database\Factories\FakeProcessFactory;
-use IBroStudio\Tasks\Tests\Support\DTO\ProcessableDto;
-use IBroStudio\Tasks\Tests\Support\Payloads\FakePayload;
+use IBroStudio\Tasks\Tests\Support\Dto\FakeProcessableDto;
+use IBroStudio\Tasks\Tests\Support\Payloads\FakePayloadDefault;
 use IBroStudio\Tasks\Tests\Support\Tasks\AnotherFakeTask;
 use IBroStudio\Tasks\Tests\Support\Tasks\FakeFirstTask;
 use IBroStudio\Tasks\Tests\Support\Tasks\ThirdFakeTask;
@@ -22,7 +22,7 @@ use Parental\HasParent;
 /**
  * @property int $id
  * @property string $class
- * @property FakePayload $payload
+ * @property FakePayloadDefault $payload
  * @property ProcessStatesEnum $state
  * @property string $log_batch_uuid
  * @property int $parent_process_id
@@ -35,6 +35,11 @@ class FakeProcess extends Process implements ProcessContract
 
     protected $table = 'processes';
 
+    public function getProcessableDtoClass(): string
+    {
+        return FakeProcessableDto::class;
+    }
+
     protected static function newFactory(): Factory
     {
         return FakeProcessFactory::new();
@@ -43,17 +48,12 @@ class FakeProcess extends Process implements ProcessContract
     protected function getConfig(array $properties = []): ProcessConfigDTO
     {
         return parent::getConfig([
-            'payload' => FakePayload::class,
+            'payload' => FakePayloadDefault::class,
             'tasks' => [
                 FakeFirstTask::class,
                 AnotherFakeTask::class,
                 ThirdFakeTask::class,
             ],
         ]);
-    }
-
-    protected function getProcessableDtoClass(): string
-    {
-        return ProcessableDto::class;
     }
 }

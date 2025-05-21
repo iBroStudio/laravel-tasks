@@ -13,8 +13,8 @@ use IBroStudio\Tasks\Concerns\HasTasks;
 use IBroStudio\Tasks\Contracts\PayloadContract;
 use IBroStudio\Tasks\Contracts\ProcessContract;
 use IBroStudio\Tasks\Contracts\ProcessExceptionContract;
+use IBroStudio\Tasks\DTO\DefaultProcessPayloadDTO;
 use IBroStudio\Tasks\DTO\ProcessConfigDTO;
-use IBroStudio\Tasks\DTO\ProcessPayloadDTO;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -121,17 +121,13 @@ class Process extends Model implements ProcessContract
 
     public function updatePayload(PayloadContract|array $data): self
     {
-        $this->payload = is_array($data) ? $this->payload->update($data) : $data;
+        $this->payload = is_array($data) ? $this->payload->updateDto($data) : $data;
 
         if ($this->isClean()) {
             return $this;
         }
 
         return $this->tap()->save();
-
-        return $this->tap()->update([
-            'payload' => $this->payload->update($data),
-        ]);
     }
 
     protected function casts()
@@ -144,7 +140,7 @@ class Process extends Model implements ProcessContract
     protected function getConfig(array $properties = []): ProcessConfigDTO
     {
         return ProcessConfigDTO::from([
-            'payload' => ProcessPayloadDTO::class,
+            'payload' => DefaultProcessPayloadDTO::class,
             'tasks' => [],
             'log_name' => $this->getLogNameFromClass(),
             ...$properties,

@@ -10,9 +10,9 @@ use IBroStudio\Tasks\Enums\TaskStatesEnum;
 use IBroStudio\Tasks\Models\Process;
 use IBroStudio\Tasks\Models\ProcessAsTask;
 use IBroStudio\Tasks\Models\Task;
+use IBroStudio\Tasks\Tests\Support\Processes\FakeParentProcess;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Arr;
 
 /**
  * @see Process
@@ -22,6 +22,11 @@ trait HasTasks
     public static function bootHasTasks()
     {
         static::created(function (Process $process) {
+
+            if ($process->type === FakeParentProcess::class) {
+
+            }
+
             $process->tasks()->createMany(
                 $process->config->tasks->map(function (ClassString $type) use ($process) {
 
@@ -30,12 +35,14 @@ trait HasTasks
                     if (is_a($type->value, Process::class, true)) {
                         $child_process = $type->value::create([
                             'payload' => $process->payload,
+                            'processable_dto' => $process->processable_dto,
                         ]);
 
                         $task_properties = ['type' => ProcessAsTask::class, 'as_process_id' => $child_process->id];
                     }
 
                     if (method_exists($type->value, 'getProcessableDtoClass') && ! is_null($process->processable_dto)) {
+                        // dd($type->value, $process->processable_dto);
                         data_set($task_properties, 'processable_dto', $process->processable_dto);
                     }
 

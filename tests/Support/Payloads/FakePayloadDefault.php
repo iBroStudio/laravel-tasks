@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace IBroStudio\Tasks\Tests\Support\Payloads;
 
 use IBroStudio\DataObjects\ValueObjects\Text;
-use IBroStudio\Tasks\DTO\ProcessPayloadDTO;
+use IBroStudio\Tasks\DTO\DefaultProcessPayloadDTO;
 use IBroStudio\Tasks\Models\Process;
 use Spatie\LaravelData\Optional;
 
-class FakePayload extends ProcessPayloadDTO
+class FakePayloadDefault extends DefaultProcessPayloadDTO
 {
     public function __construct(
         public string $property1,

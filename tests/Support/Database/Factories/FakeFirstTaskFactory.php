@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace IBroStudio\Tasks\Tests\Support\Database\Factories;
 
-use IBroStudio\Tasks\Tests\Support\DTO\ProcessableDto;
-use IBroStudio\Tasks\Tests\Support\Payloads\FakePayload;
+use IBroStudio\Tasks\Tests\Support\Dto\FakeProcessableDto;
+use IBroStudio\Tasks\Tests\Support\Payloads\FakePayloadDefault;
 use IBroStudio\Tasks\Tests\Support\Processes\FakeProcess;
 use IBroStudio\Tasks\Tests\Support\Tasks\FakeFirstTask;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -18,7 +18,7 @@ class FakeFirstTaskFactory extends Factory
     {
         return [
             'process_id' => FakeProcess::factory([
-                'payload' => FakePayload::from(['property1' => 'value1']),
+                'payload' => FakePayloadDefault::from(['property1' => 'value1']),
             ]),
         ];
     }
@@ -27,7 +27,7 @@ class FakeFirstTaskFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
-                'processable_dto' => ProcessableDto::from([
+                'processable_dto' => FakeProcessableDto::from([
                     'name' => fake()->name,
                 ]),
             ];
