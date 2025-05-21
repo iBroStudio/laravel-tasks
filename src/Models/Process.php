@@ -13,8 +13,8 @@ use IBroStudio\Tasks\Concerns\HasTasks;
 use IBroStudio\Tasks\Contracts\PayloadContract;
 use IBroStudio\Tasks\Contracts\ProcessContract;
 use IBroStudio\Tasks\Contracts\ProcessExceptionContract;
-use IBroStudio\Tasks\DTO\DefaultProcessPayloadDTO;
-use IBroStudio\Tasks\DTO\ProcessConfigDTO;
+use IBroStudio\Tasks\Dto\DefaultProcessPayloadDto;
+use IBroStudio\Tasks\Dto\ProcessConfigDto;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -32,7 +32,7 @@ use Spatie\Activitylog\Facades\LogBatch;
  * @property ProcessStatesEnum $state
  * @property string $log_batch_uuid
  * @property int $parent_process_id
- * @property-read ProcessConfigDTO $config
+ * @property-read ProcessConfigDto $config
  * @property-read \Illuminate\Database\Eloquent\Collection|Model[] $processable
  * @property-read Process|null $parentProcess
  */
@@ -134,13 +134,13 @@ class Process extends Model implements ProcessContract
     {
         return [
             'state' => ProcessStatesEnum::class,
+            'payload' => DefaultProcessPayloadDto::class,
         ];
     }
 
-    protected function getConfig(array $properties = []): ProcessConfigDTO
+    protected function getConfig(array $properties = []): ProcessConfigDto
     {
-        return ProcessConfigDTO::from([
-            'payload' => DefaultProcessPayloadDTO::class,
+        return ProcessConfigDto::from([
             'tasks' => [],
             'log_name' => $this->getLogNameFromClass(),
             ...$properties,

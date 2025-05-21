@@ -8,7 +8,7 @@ use Closure;
 use IBroStudio\Tasks\Concerns\HasProcessableModel;
 use IBroStudio\Tasks\Contracts\PayloadContract;
 use IBroStudio\Tasks\Contracts\ProcessContract;
-use IBroStudio\Tasks\DTO\ProcessableDto;
+use IBroStudio\Tasks\Dto\ProcessableDto;
 use IBroStudio\Tasks\Enums\TaskStatesEnum;
 use IBroStudio\Tasks\Exceptions\SkipTaskException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

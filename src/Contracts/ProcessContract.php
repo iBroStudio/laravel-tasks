@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace IBroStudio\Tasks\Contracts;
 
-use IBroStudio\Tasks\DTO\ProcessConfigDTO;
+use IBroStudio\Tasks\Dto\ProcessConfigDto;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 
 /**
@@ -14,7 +14,7 @@ use IBroStudio\Tasks\Enums\ProcessStatesEnum;
  * @property-read ProcessStatesEnum $state
  * @property string $log_batch_uuid
  * @property int $parent_process_id
- * @property-read ProcessConfigDTO $config
+ * @property-read ProcessConfigDto $config
  */
 interface ProcessContract
 {

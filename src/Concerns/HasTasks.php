@@ -23,10 +23,6 @@ trait HasTasks
     {
         static::created(function (Process $process) {
 
-            if ($process->type === FakeParentProcess::class) {
-
-            }
-
             $process->tasks()->createMany(
                 $process->config->tasks->map(function (ClassString $type) use ($process) {
 
@@ -42,7 +38,6 @@ trait HasTasks
                     }
 
                     if (method_exists($type->value, 'getProcessableDtoClass') && ! is_null($process->processable_dto)) {
-                        // dd($type->value, $process->processable_dto);
                         data_set($task_properties, 'processable_dto', $process->processable_dto);
                     }
 

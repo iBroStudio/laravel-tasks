@@ -34,7 +34,7 @@ it('can attach a process', function () {
 
 it('allows processable to call process', function () {
     $processable = ProcessableFakeModel::factory()->create();
-    $process = $processable->process(FakeProcess::class, ['property1' => 'value1']);
+    $process = $processable->process(FakeProcess::class, FakePayloadDefault::from(['property1' => 'value1']));
 
     expect($process)->toBeInstanceOf(FakeProcess::class)
         ->and($process->processable->is($processable))->toBeTrue()
@@ -44,7 +44,10 @@ it('allows processable to call process', function () {
 });
 
 it('allows processable class to call process statically', function () {
-    $process = ProcessableFakeModel::callProcess(FakeProcess::class, ['property1' => 'value1']);
+    $process = ProcessableFakeModel::callProcess(
+        FakeProcess::class,
+        FakePayloadDefault::from(['property1' => 'value1'])
+    );
 
     expect($process)->toBeInstanceOf(FakeProcess::class)
         ->and($process->state)->toBe(ProcessStatesEnum::COMPLETED)

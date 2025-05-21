@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace IBroStudio\Tasks\DTO;
+namespace IBroStudio\Tasks\Dto;
 
 use IBroStudio\DataObjects\Concerns\UpdatableDto;
 use IBroStudio\Tasks\Contracts\PayloadContract;
 use Spatie\LaravelData\Data;
 
-class DefaultProcessPayloadDTO extends Data implements PayloadContract
+abstract class DefaultProcessPayloadDto extends Data implements PayloadContract
 {
     use UpdatableDto;
 }

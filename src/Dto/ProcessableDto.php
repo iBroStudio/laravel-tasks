@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace IBroStudio\Tasks\DTO;
+namespace IBroStudio\Tasks\Dto;
 
 use IBroStudio\Tasks\Contracts\PayloadContract;
 use IBroStudio\Tasks\Models\Process;
@@ -16,11 +16,11 @@ abstract class ProcessableDto extends Data
      */
     public function process(
         string $processClass,
-        array $payload_properties = [],
+        PayloadContract|array $payload,
         bool $async = false): Process
     {
         return $processClass::create([
-            'payload' => $payload_properties,
+            'payload' => $payload,
             'processable_dto' => $this,
         ])->handle();
     }

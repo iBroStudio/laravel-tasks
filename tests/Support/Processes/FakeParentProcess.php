@@ -6,7 +6,7 @@ namespace IBroStudio\Tasks\Tests\Support\Processes;
 
 use IBroStudio\Tasks\Concerns\HasProcessableDto;
 use IBroStudio\Tasks\Contracts\ProcessContract;
-use IBroStudio\Tasks\DTO\ProcessConfigDTO;
+use IBroStudio\Tasks\Dto\ProcessConfigDto;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use IBroStudio\Tasks\Models\Process;
 use IBroStudio\Tasks\Tests\Support\Database\Factories\FakeParentProcessFactory;
@@ -44,10 +44,9 @@ class FakeParentProcess extends Process implements ProcessContract
         return FakeParentProcessFactory::new();
     }
 
-    protected function getConfig(array $properties = []): ProcessConfigDTO
+    protected function getConfig(array $properties = []): ProcessConfigDto
     {
         return parent::getConfig([
-            'payload' => FakePayloadDefault::class,
             'tasks' => [
                 FakeFirstTask::class,
                 FakeProcess::class,

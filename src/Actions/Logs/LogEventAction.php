@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace IBroStudio\Tasks\Actions\Logs;
 
-use IBroStudio\Tasks\DTO\ProcessLogDTO;
+use IBroStudio\Tasks\Dto\ProcessLogDto;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Spatie\Activitylog\Facades\LogBatch;
 use Spatie\Activitylog\Models\Activity;
@@ -13,7 +13,7 @@ class LogEventAction
 {
     use AsAction;
 
-    public function handle(string $log_batch_uuid, ProcessLogDTO $logData): void
+    public function handle(string $log_batch_uuid, ProcessLogDto $logData): void
     {
         LogBatch::startBatch();
         LogBatch::setBatch($log_batch_uuid);

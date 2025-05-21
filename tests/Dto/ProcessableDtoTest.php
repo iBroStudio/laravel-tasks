@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use IBroStudio\Tasks\Enums\TaskStatesEnum;
+use IBroStudio\Tasks\Models\Process;
 use IBroStudio\Tasks\Tests\Support\Dto\FakeProcessableDto;
 use IBroStudio\Tasks\Tests\Support\Payloads\FakePayloadDefault;
 use IBroStudio\Tasks\Tests\Support\Processes\FakeParentProcess;
 use IBroStudio\Tasks\Tests\Support\Processes\FakeProcess;
 use IBroStudio\Tasks\Tests\Support\Tasks\FakeFirstTask;
-use IBroStudio\Tasks\Models\Process;
 
 it('allows processable DTO to call process', function () {
     $processable = FakeProcessableDto::from([
         'name' => fake()->name,
     ]);
-    $process = $processable->process(FakeProcess::class, ['property1' => 'value1']);
+    $process = $processable->process(FakeProcess::class, FakePayloadDefault::from(['property1' => 'value1']));
 
     expect($process)->toBeInstanceOf(FakeProcess::class)
         ->and($process->processable_dto)->toBeInstanceOf(FakeProcessableDto::class)
@@ -39,7 +39,7 @@ it('can execute a process within a process with a processable DTO', function () 
     $processable = FakeProcessableDto::from([
         'name' => fake()->name,
     ]);
-    $process = $processable->process(FakeParentProcess::class, ['property1' => 'value1']);
+    $process = $processable->process(FakeParentProcess::class, FakePayloadDefault::from(['property1' => 'value1']));
 
     $child_process = Process::whereType(FakeProcess::class)->first();
 

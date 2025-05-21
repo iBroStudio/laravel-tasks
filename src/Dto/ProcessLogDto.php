@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace IBroStudio\Tasks\DTO;
+namespace IBroStudio\Tasks\Dto;
 
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\LaravelData\Data;
 
-class ProcessLogDTO extends Data
+class ProcessLogDto extends Data
 {
     public function __construct(
         public string $logName,

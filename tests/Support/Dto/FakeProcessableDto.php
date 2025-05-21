@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace IBroStudio\Tasks\Tests\Support\Dto;
 
-use IBroStudio\Tasks\DTO\ProcessableDto;
+use IBroStudio\Tasks\Dto\ProcessableDto;
 
 class FakeProcessableDto extends ProcessableDto
 {

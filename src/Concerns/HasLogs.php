@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace IBroStudio\Tasks\Concerns;
 
 use IBroStudio\Tasks\Actions\Logs\LogEventAction;
-use IBroStudio\Tasks\DTO\ProcessLogDTO;
+use IBroStudio\Tasks\Dto\ProcessLogDto;
 use IBroStudio\Tasks\Models\Task;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -27,7 +27,7 @@ trait HasLogs
 
             LogEventAction::dispatch(
                 $this->log_batch_uuid,
-                new ProcessLogDTO(
+                new ProcessLogDto(
                     logName: $this->logName(),
                     causedBy: auth()->user(),
                     performedOn: $this->processable ?? $this->parentProcess ?? $this,
