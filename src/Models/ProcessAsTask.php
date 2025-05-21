@@ -13,8 +13,9 @@ class ProcessAsTask extends Task
 
     protected function execute(PayloadContract $payload): PayloadContract|array
     {
-        $process = $this->asProcess->handle($payload);
-
-        return $process->payload;
+        return $this->asProcess
+            ->updatePayload($payload)
+            ->handle()
+            ->payload;
     }
 }

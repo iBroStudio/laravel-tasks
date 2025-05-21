@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace IBroStudio\Tasks\Concerns;
 
 use IBroStudio\Tasks\Contracts\PayloadContract;
-use IBroStudio\Tasks\Dto\DefaultProcessPayloadDto;
 use IBroStudio\Tasks\Models\Process;
 use IBroStudio\Tasks\Models\Task;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -18,9 +17,9 @@ trait IsProcessableModel
      * @return ($async is true ? PendingDispatch : Process)
      */
     public static function callProcess(
-        string                $processClass,
+        string $processClass,
         PayloadContract|array $payload,
-        bool                  $async = false): Process|PendingDispatch
+        bool $async = false): Process|PendingDispatch
     {
         return (new static)->process($processClass, $payload, $async);
     }
@@ -46,9 +45,9 @@ trait IsProcessableModel
      * @param  class-string<Process>  $processClass
      */
     public function process(
-        string                $processClass,
+        string $processClass,
         PayloadContract|array $payload,
-        bool                  $async = false): Process
+        bool $async = false): Process
     {
         return $this->processes()
             ->create([

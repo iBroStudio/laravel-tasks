@@ -32,6 +32,7 @@ use Parental\HasChildren;
  * @property string $processable_type
  * @property ProcessableDto $processable_dto
  * @property Process $process
+ * @property Process $asProcess
  */
 class Task extends Model
 {
