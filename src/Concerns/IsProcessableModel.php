@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IBroStudio\Tasks\Concerns;
 
 use IBroStudio\Tasks\Contracts\PayloadContract;
+use IBroStudio\Tasks\Dto\DefaultProcessPayloadDto;
 use IBroStudio\Tasks\Models\Process;
 use IBroStudio\Tasks\Models\Task;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -46,13 +47,13 @@ trait IsProcessableModel
      */
     public function process(
         string $processClass,
-        PayloadContract|array $payload,
+        PayloadContract|array|null $payload = null,
         bool $async = false): Process
     {
         return $this->processes()
             ->create([
                 'type' => $processClass,
-                'payload' => $payload,
+                'payload' => $payload ?? DefaultProcessPayloadDto::from(),
             ])
             ->handle();
     }
@@ -62,13 +63,13 @@ trait IsProcessableModel
      */
     public function task(
         string $taskClass,
-        PayloadContract $payload,
+        ?PayloadContract $payload = null,
         bool $async = false): Task
     {
         return $this->tasks()
             ->create(['type' => $taskClass])
             ->tap()
-            ->handle($payload);
+            ->handle($payload ?? DefaultProcessPayloadDto::from());
     }
 
     public function tasks(): MorphMany
