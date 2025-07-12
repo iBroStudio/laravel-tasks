@@ -15,8 +15,7 @@ class TasksServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-tasks')
             ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_laravel_tasks_table')
+            ->discoversMigrations()
             ->hasRoute('web')
             ->hasInstallCommand(function (InstallCommand $command) {
                 $command
