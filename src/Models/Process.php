@@ -6,6 +6,7 @@ namespace IBroStudio\Tasks\Models;
 
 use IBroStudio\DataObjects\Concerns\HasConfig;
 use IBroStudio\DataObjects\ValueObjects\ClassString;
+use IBroStudio\Tasks\Actions\AsyncProcessAction;
 use IBroStudio\Tasks\Actions\Logs\EnsureProcessLogPerformedOnAction;
 use IBroStudio\Tasks\Concerns\CanBeResumed;
 use IBroStudio\Tasks\Concerns\HasLogs;
@@ -20,6 +21,8 @@ use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Support\Facades\Pipeline;
 use Illuminate\Support\Traits\Tappable;
 use Lorisleiva\Actions\Concerns\AsObject;
@@ -64,17 +67,6 @@ class Process extends Model implements ProcessContract
 
     protected $with = ['tasks'];
 
-    protected static function booted(): void
-    {
-        static::creating(function (Process $process) {
-            if (is_null($process->payload)) {
-                $process->payload = with($process->getConfig()->payload, fn ($payload) => $payload instanceof ClassString ?
-                    $payload->value::from() : DefaultProcessPayloadDto::from()
-                );
-            }
-        });
-    }
-
     public function parentProcess(): BelongsTo
     {
         return $this->belongsTo(self::class, 'parent_process_id');
@@ -99,6 +91,11 @@ class Process extends Model implements ProcessContract
             return $processException->task->process->refresh();
 
         }
+    }
+
+    public function dispatch(): void
+    {
+        AsyncProcessAction::dispatch($this);
     }
 
     public function transitionToStart(): void
@@ -140,6 +137,17 @@ class Process extends Model implements ProcessContract
         }
 
         return $this->tap()->save();
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (Process $process) {
+            if (is_null($process->payload)) {
+                $process->payload = with($process->getConfig()->payload, fn ($payload) => $payload instanceof ClassString ?
+                    $payload->value::from() : DefaultProcessPayloadDto::from()
+                );
+            }
+        });
     }
 
     protected function casts()

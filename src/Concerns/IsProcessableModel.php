@@ -55,7 +55,29 @@ trait IsProcessableModel
                 'type' => $processClass,
                 'payload' => $payload,
             ])
+            ->tap(fn (Process $process) =>
+                $process->when($async, fn (Process $process) => $process->dispatch())
+                && $process->unless($async, fn (Process $process) => $process->handle())
+            );
+
+        return $this->processes()
+            ->create([
+                'type' => $processClass,
+                'payload' => $payload,
+            ])
             ->handle();
+    }
+
+    /**
+     * @param  class-string<Process>  $processClass
+     */
+    public function dispatch(string $processClass, PayloadContract|array|null $payload = null): Process
+    {
+        return $this->process(
+            $processClass,
+            $payload,
+            async: true
+        );
     }
 
     /**
@@ -66,10 +88,14 @@ trait IsProcessableModel
         ?PayloadContract $payload = null,
         bool $async = false): Task
     {
+        $payload = $payload ?? DefaultProcessPayloadDto::from();
+
         return $this->tasks()
             ->create(['type' => $taskClass])
-            ->tap()
-            ->handle($payload ?? DefaultProcessPayloadDto::from());
+            ->tap(fn (Task $task) =>
+                $task->when($async, fn (Task $task) => $task->dispatch($payload))
+                && $task->unless($async, fn (Task $task) => $task->handle($payload))
+            );
     }
 
     public function tasks(): MorphMany

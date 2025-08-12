@@ -14,7 +14,9 @@ use IBroStudio\Tasks\Exceptions\SkipTaskException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Tappable;
+use Lorisleiva\Actions\Concerns\AsJob;
 use Lorisleiva\Actions\Concerns\AsObject;
 use Parental\HasChildren;
 
@@ -37,10 +39,12 @@ use Parental\HasChildren;
 class Task extends Model
 {
     use AsObject;
+    use AsJob;
     use HasChildren;
     use HasFactory;
     use HasProcessableModel;
     use Tappable;
+    use Conditionable;
 
     public $timestamps = false;
 

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use IBroStudio\Tasks\Actions\AsyncProcessAction;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use IBroStudio\Tasks\Enums\TaskStatesEnum;
 use IBroStudio\Tasks\Tests\Support\Models\ProcessableFakeModel;
@@ -35,7 +36,7 @@ it('can attach a process', function () {
 it('allows processable to call process', function () {
     $processable = ProcessableFakeModel::factory()->create();
     $process = $processable->process(FakeProcess::class);
-    //$process = $processable->process(FakeProcess::class, FakePayloadDefault::from(['property1' => 'value1']));
+    // $process = $processable->process(FakeProcess::class, FakePayloadDefault::from(['property1' => 'value1']));
     expect($process)->toBeInstanceOf(FakeProcess::class)
         ->and($process->processable->is($processable))->toBeTrue()
         ->and($process->state)->toBe(ProcessStatesEnum::COMPLETED)
@@ -52,6 +53,16 @@ it('allows processable class to call process statically', function () {
     expect($process)->toBeInstanceOf(FakeProcess::class)
         ->and($process->state)->toBe(ProcessStatesEnum::COMPLETED)
         ->and($process->tasks)->each(fn ($task) => $task->state->toBe(TaskStatesEnum::COMPLETED));
+});
+
+it('allows processable to call async process', function () {
+    Queue::fake();
+
+    $processable = ProcessableFakeModel::factory()->create();
+
+    $processable->dispatch(FakeProcess::class);
+
+    AsyncProcessAction::assertPushed();
 });
 
 it('can have task', function () {
@@ -79,6 +90,16 @@ it('allows processable to call task', function () {
     expect($task)->toBeInstanceOf(FakeFirstTask::class)
         ->and($task->processable->is($processable))->toBeTrue()
         ->and($task->state)->toBe(TaskStatesEnum::COMPLETED);
+});
+
+it('allows processable to call async task', function () {
+    Queue::fake();
+
+    $processable = ProcessableFakeModel::factory()->create();
+
+    $processable->task(FakeFirstTask::class, FakePayloadDefault::from(['property1' => 'value1']), async: true);
+
+    FakeFirstTask::assertPushed();
 });
 
 it('allows processable class to call task statically', function () {

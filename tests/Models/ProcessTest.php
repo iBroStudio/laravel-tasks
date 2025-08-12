@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use IBroStudio\DataObjects\ValueObjects\Text;
+use IBroStudio\Tasks\Actions\AsyncProcessAction;
 use IBroStudio\Tasks\Enums\ProcessStatesEnum;
 use IBroStudio\Tasks\Enums\TaskStatesEnum;
 use IBroStudio\Tasks\Models\Process;
@@ -10,6 +11,7 @@ use IBroStudio\Tasks\Tests\Support\Payloads\FakePayloadDefault;
 use IBroStudio\Tasks\Tests\Support\Processes\FakeParentProcess;
 use IBroStudio\Tasks\Tests\Support\Processes\FakeProcess;
 
+use Illuminate\Foundation\Bus\PendingDispatch;
 use function Pest\Laravel\assertModelExists;
 use function Pest\Laravel\get;
 
@@ -88,4 +90,12 @@ it('can execute a process within a process', function () {
         ->and($process->tasks)->each(fn ($task) => $task->state->toBe(TaskStatesEnum::COMPLETED))
         ->and($child_process->state)->toBe(ProcessStatesEnum::COMPLETED)
         ->and($child_process->tasks)->each(fn ($task) => $task->state->toBe(TaskStatesEnum::COMPLETED));
+});
+
+it('can dispatch a process', function () {
+    Queue::fake();
+
+    FakeProcess::factory()->create()->dispatch();
+
+    AsyncProcessAction::assertPushed();
 });
