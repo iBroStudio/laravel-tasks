@@ -15,10 +15,10 @@
             "role": "Developer"
         }
     ],
-    "version": "1.8.3",
+    "version": "1.8.4",
     "require": {
         "php": "^8.4",
-        "ibrostudio/laravel-data-objects": "^1.0",
+        "ibrostudio/laravel-data-objects": "^1.9",
         "illuminate/contracts": "^10.0||^11.0||^12.0",
         "lorisleiva/laravel-actions": "^2.9",
         "spatie/laravel-activitylog": "^4.10",

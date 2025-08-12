@@ -53,7 +53,7 @@ trait IsProcessableModel
         return $this->processes()
             ->create([
                 'type' => $processClass,
-                'payload' => $payload ?? DefaultProcessPayloadDto::from(),
+                'payload' => $payload,
             ])
             ->handle();
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace IBroStudio\Tasks\Models;
 
 use IBroStudio\DataObjects\Concerns\HasConfig;
+use IBroStudio\DataObjects\ValueObjects\ClassString;
 use IBroStudio\Tasks\Actions\Logs\EnsureProcessLogPerformedOnAction;
 use IBroStudio\Tasks\Concerns\CanBeResumed;
 use IBroStudio\Tasks\Concerns\HasLogs;
@@ -62,6 +63,17 @@ class Process extends Model implements ProcessContract
     ];
 
     protected $with = ['tasks'];
+
+    protected static function booted(): void
+    {
+        static::creating(function (Process $process) {
+            if (is_null($process->payload)) {
+                $process->payload = with($process->getConfig()->payload, fn ($payload) => $payload instanceof ClassString ?
+                    $payload->value::from() : DefaultProcessPayloadDto::from()
+                );
+            }
+        });
+    }
 
     public function parentProcess(): BelongsTo
     {

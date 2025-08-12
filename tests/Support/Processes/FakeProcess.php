@@ -48,6 +48,7 @@ class FakeProcess extends Process implements ProcessContract
     protected function getConfig(array $properties = []): ProcessConfigDto
     {
         return parent::getConfig([
+            'payload' => FakePayloadDefault::class,
             'tasks' => [
                 FakeFirstTask::class,
                 AnotherFakeTask::class,
