@@ -11,7 +11,6 @@ use IBroStudio\Tasks\Tests\Support\Payloads\FakePayloadDefault;
 use IBroStudio\Tasks\Tests\Support\Processes\FakeParentProcess;
 use IBroStudio\Tasks\Tests\Support\Processes\FakeProcess;
 
-use Illuminate\Foundation\Bus\PendingDispatch;
 use function Pest\Laravel\assertModelExists;
 use function Pest\Laravel\get;
 

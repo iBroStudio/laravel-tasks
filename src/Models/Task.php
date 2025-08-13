@@ -38,13 +38,13 @@ use Parental\HasChildren;
  */
 class Task extends Model
 {
-    use AsObject;
     use AsJob;
+    use AsObject;
+    use Conditionable;
     use HasChildren;
     use HasFactory;
     use HasProcessableModel;
     use Tappable;
-    use Conditionable;
 
     public $timestamps = false;
 

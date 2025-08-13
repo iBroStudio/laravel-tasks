@@ -50,22 +50,19 @@ trait IsProcessableModel
         PayloadContract|array|null $payload = null,
         bool $async = false): Process
     {
-        return $this->processes()
+        $process = $this->processes()
             ->create([
                 'type' => $processClass,
                 'payload' => $payload,
-            ])
-            ->tap(fn (Process $process) =>
-                $process->when($async, fn (Process $process) => $process->dispatch())
-                && $process->unless($async, fn (Process $process) => $process->handle())
-            );
+            ]);
 
-        return $this->processes()
-            ->create([
-                'type' => $processClass,
-                'payload' => $payload,
-            ])
-            ->handle();
+        if (! $async) {
+            return $process->handle();
+        }
+
+        $process->dispatch();
+
+        return $process;
     }
 
     /**
@@ -92,8 +89,7 @@ trait IsProcessableModel
 
         return $this->tasks()
             ->create(['type' => $taskClass])
-            ->tap(fn (Task $task) =>
-                $task->when($async, fn (Task $task) => $task->dispatch($payload))
+            ->tap(fn (Task $task) => $task->when($async, fn (Task $task) => $task->dispatch($payload))
                 && $task->unless($async, fn (Task $task) => $task->handle($payload))
             );
     }
