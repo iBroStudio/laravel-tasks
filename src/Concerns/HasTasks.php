@@ -33,6 +33,10 @@ trait HasTasks
                             'processable_dto' => $process->processable_dto,
                         ]);
 
+                        if ($process->processable) {
+                            $child_process->addProcessable($process->processable);
+                        }
+
                         $task_properties = ['type' => ProcessAsTask::class, 'as_process_id' => $child_process->id];
                     }
 
