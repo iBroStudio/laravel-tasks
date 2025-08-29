@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /**
  * @see \IBroStudio\Tasks\Models\Process
- * @see \IBroStudio\Tasks\Models\Task
+ * @see Task
  */
 trait HasProcessableModel
 {

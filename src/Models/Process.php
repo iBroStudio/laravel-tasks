@@ -26,6 +26,7 @@ use Illuminate\Support\Traits\Tappable;
 use Lorisleiva\Actions\Concerns\AsObject;
 use Parental\HasChildren;
 use Spatie\Activitylog\Facades\LogBatch;
+use Spatie\LaravelData\Data;
 
 /**
  * @property-read int $id
@@ -128,11 +129,14 @@ class Process extends Model implements ProcessContract
 
     public function updatePayload(PayloadContract|array $data): self
     {
-        $this->payload = is_array($data) ? $this->payload->updateDto($data) : $data;
+        $payload = is_array($data) ? $this->payload->updateDto($data) : $data;
 
-        if ($this->isClean()) {
+        /** @var Data $payload */
+        if ($this->payload->equalTo($payload)) {
             return $this;
         }
+
+        $this->payload = $payload;
 
         return $this->tap()->save();
     }
