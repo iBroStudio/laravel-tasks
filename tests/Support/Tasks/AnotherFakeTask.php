@@ -27,7 +27,7 @@ class AnotherFakeTask extends Task
     }
 
     /**
-     * @param  FakeProcess  $process
+     * @param  FakePayloadDefault  $payload
      */
     protected function execute(PayloadContract $payload): PayloadContract|array
     {

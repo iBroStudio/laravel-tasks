@@ -28,7 +28,9 @@ trait HasTasks
                     $task_properties = ['type' => $type->value];
 
                     if (is_a($type->value, Process::class, true)) {
+
                         $child_process = $type->value::create([
+                            'parent_process_id' => $process->id,
                             'payload' => $process->payload,
                             'processable_dto' => $process->processable_dto,
                         ]);

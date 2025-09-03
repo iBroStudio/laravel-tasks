@@ -87,8 +87,17 @@ class Process extends Model implements ProcessContract
 
         } catch (ProcessExceptionContract $processException) {
 
-            return $processException->task->process->refresh();
+            if ($this->parent_process_id) {
 
+                $class = get_class($processException);
+
+                throw new $class(
+                    Task::whereAsProcessId($this->id)->first(),
+                    $processException->getMessage(),
+                );
+            }
+
+            return $processException->task->process->refresh();
         }
     }
 

@@ -91,6 +91,17 @@ it('can execute a process within a process', function () {
         ->and($child_process->tasks)->each(fn ($task) => $task->state->toBe(TaskStatesEnum::COMPLETED));
 });
 
+it('stops execution if a child process failed', function () {
+    $process = FakeParentProcess::factory()->create([
+        'payload' => FakePayloadDefault::from(['abort_process' => true]),
+    ])->handle();
+
+    $child_process = Process::whereType(FakeProcess::class)->first();
+
+    expect($process->state)->toBe(ProcessStatesEnum::ABORTED)
+        ->and($child_process->state)->toBe(ProcessStatesEnum::ABORTED);
+});
+
 it('can dispatch a process', function () {
     Queue::fake();
 
