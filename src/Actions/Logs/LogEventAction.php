@@ -7,7 +7,6 @@ namespace IBroStudio\Tasks\Actions\Logs;
 use IBroStudio\Tasks\Dto\ProcessLogDto;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Spatie\Activitylog\Facades\LogBatch;
-use Spatie\Activitylog\Models\Activity;
 
 class LogEventAction
 {
@@ -20,12 +19,7 @@ class LogEventAction
 
         activity($logData->logName)
             ->causedBy($logData->causedBy)
-            ->tap(function (Activity $activity) use ($logData) {
-                // @phpstan-ignore-next-line
-                $activity->subject_id = $logData->performedOn->id;
-                // @phpstan-ignore-next-line
-                $activity->subject_type = $logData->performedOn->type;
-            })
+            ->performedOn($logData->performedOn['type']::find($logData->performedOn['id']))
             ->event($logData->event->getLabel())
             ->withProperties($logData->properties)
             ->log($logData->description);

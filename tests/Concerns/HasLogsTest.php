@@ -26,7 +26,6 @@ it('can log process events', function () {
     $process = FakeProcess::factory()->create()->handle();
     $logs = Activity::inLog($process->logName())->get();
 
-    // dd($logs->toArray());
     expect(
         $logs->get(0)->except('created_at', 'updated_at')
     )->toMatchArray([

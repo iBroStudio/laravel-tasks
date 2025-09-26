@@ -12,7 +12,7 @@ use Spatie\LaravelData\Optional;
 class FakePayloadDefault extends DefaultProcessPayloadDto
 {
     public function __construct(
-        public ?string $property1 = null,
+        public ?string $property1,
         public Text|Optional $property2,
         public Process|array|Optional $modelproperty,
         public bool $skip_task = false,

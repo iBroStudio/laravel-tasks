@@ -20,9 +20,10 @@ trait IsProcessableModel
     public static function callProcess(
         string $processClass,
         PayloadContract|array $payload,
+        ?string $monitoring_uuid = null,
         bool $async = false): Process|PendingDispatch
     {
-        return (new static)->process($processClass, $payload, $async);
+        return (new static)->process($processClass, $payload, $monitoring_uuid, $async);
     }
 
     /**
@@ -48,12 +49,14 @@ trait IsProcessableModel
     public function process(
         string $processClass,
         PayloadContract|array|null $payload = null,
+        ?string $monitoring_uuid = null,
         bool $async = false): Process
     {
         $process = $this->processes()
             ->create([
                 'type' => $processClass,
                 'payload' => $payload,
+                'monitoring_uuid' => $monitoring_uuid,
             ]);
 
         if (! $async) {
@@ -68,11 +71,15 @@ trait IsProcessableModel
     /**
      * @param  class-string<Process>  $processClass
      */
-    public function dispatch(string $processClass, PayloadContract|array|null $payload = null): Process
+    public function dispatch(
+        string $processClass,
+        PayloadContract|array|null $payload = null,
+        ?string $monitoring_uuid = null): Process
     {
         return $this->process(
             $processClass,
             $payload,
+            $monitoring_uuid,
             async: true
         );
     }

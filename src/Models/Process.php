@@ -9,6 +9,7 @@ use IBroStudio\DataObjects\ValueObjects\ClassString;
 use IBroStudio\Tasks\Actions\AsyncProcessAction;
 use IBroStudio\Tasks\Actions\Logs\EnsureProcessLogPerformedOnAction;
 use IBroStudio\Tasks\Concerns\CanBeResumed;
+use IBroStudio\Tasks\Concerns\HasHandleExtractor;
 use IBroStudio\Tasks\Concerns\HasLogs;
 use IBroStudio\Tasks\Concerns\HasProcessableModel;
 use IBroStudio\Tasks\Concerns\HasTasks;
@@ -46,6 +47,7 @@ class Process extends Model implements ProcessContract
     use HasChildren;
     use HasConfig;
     use HasFactory;
+    use HasHandleExtractor;
     use HasLogs;
     use HasProcessableModel;
     use HasTasks;
@@ -62,6 +64,7 @@ class Process extends Model implements ProcessContract
         'processable_id',
         'processable_type',
         'processable_dto',
+        'monitoring_uuid',
     ];
 
     protected $with = ['tasks'];
@@ -81,7 +84,9 @@ class Process extends Model implements ProcessContract
                 Pipeline::send($this)
                     ->via('asProcessTask')
                     ->through($this->processableTasks()->get()->all())
-                    ->thenReturn(),
+                    ->then(function (Process $process) {
+                        return $process->refresh();
+                    }),
                 fn (Process $process) => $this->transitionToComplete()
             );
 
@@ -104,6 +109,11 @@ class Process extends Model implements ProcessContract
     public function dispatch(): void
     {
         AsyncProcessAction::dispatch($this);
+    }
+
+    public function isSuccessful(): bool
+    {
+        return $this->state === ProcessStatesEnum::COMPLETED;
     }
 
     public function transitionToStart(): void
@@ -173,7 +183,7 @@ class Process extends Model implements ProcessContract
     {
         return ProcessConfigDto::from([
             'tasks' => [],
-            'log_name' => $this->getLogNameFromClass(),
+            'log_name' => static::extractHandleFromClassName(),
             ...$properties,
         ]);
     }

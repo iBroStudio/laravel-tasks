@@ -23,6 +23,11 @@ class EnsureProcessLogPerformedOnAction
                     'subject_id' => $process->processable->id,
                     'subject_type' => get_class($process->processable),
                 ]);
+        } else {
+            Activity::where('batch_uuid', $process->log_batch_uuid)
+                ->update([
+                    'subject_type' => $process->type,
+                ]);
         }
     }
 }

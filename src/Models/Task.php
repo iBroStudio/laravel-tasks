@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace IBroStudio\Tasks\Models;
 
 use Closure;
+use IBroStudio\Tasks\Concerns\HasHandleExtractor;
 use IBroStudio\Tasks\Concerns\HasProcessableModel;
+use IBroStudio\Tasks\Concerns\Monitorable;
 use IBroStudio\Tasks\Contracts\PayloadContract;
 use IBroStudio\Tasks\Contracts\ProcessContract;
 use IBroStudio\Tasks\Dto\ProcessableDto;
@@ -43,7 +45,9 @@ class Task extends Model
     use Conditionable;
     use HasChildren;
     use HasFactory;
+    use HasHandleExtractor;
     use HasProcessableModel;
+    use Monitorable;
     use Tappable;
 
     public $timestamps = false;
@@ -97,6 +101,8 @@ class Task extends Model
         $this->state = $state;
 
         $this->save();
+
+        $this->broadcast();
 
         $this->process?->log(task: $this, message: $message);
     }
